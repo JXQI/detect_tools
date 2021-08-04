@@ -63,7 +63,7 @@ return:
 """
 
 def split_dataSet(path,ratio=0.8):
-    train_image=[i for i in os.listdir(join(path,'VOCdevkit','VOC2007','JPEGImages')) if i.endswith('.jpg') and 'train' in i]
+    train_image=[i for i in os.listdir(join(path,'VOCdevkit','VOC2007','JPEGImages')) if i.endswith('.jpg') and 'test' not in i]
     test_image=[i for i in os.listdir(join(path,'VOCdevkit','VOC2007','JPEGImages')) if i.endswith('.jpg') and 'test' in i]
     print(len(train_image),len(test_image))
     train_precent=ratio
@@ -79,13 +79,16 @@ def split_dataSet(path,ratio=0.8):
 
     # 写入训练集
     for i in train_list:
-        image_name=train_image[i].split('.')[0][5:]+'\n'
+        image_name=train_image[i].split('.')[0]+'\n'
         ftrainval.write(image_name)
         if i in train_set:
             ftrain.write(image_name)
         else:
             fval.write(image_name)
     # 写入测试集
+    # 排序，使图片有顺序，从小到大
+    test_image=sorted(test_image)
+    print(test_image)
     for image in test_image:
         image_name=image.split('.')[0]+'\n'
         ftest.write(image_name)
@@ -107,8 +110,8 @@ def get_classes(xml_path):
 
 
 if __name__=="__main__":
-    datapath='/Users/jinxiaoqiang/jinxiaoqiang/DATA'
-    vocpath="/Users/jinxiaoqiang/jinxiaoqiang/detection_match/data"
+    datapath='/home/victoria/train_data_jinxiaoqiang/data_set'
+    vocpath="/home/victoria/train_data_jinxiaoqiang/data_set/data"
     # 创建VOC文件夹
     convert2Voc(datapath,vocpath)
     # 数据集划分
